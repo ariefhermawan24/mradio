@@ -1,0 +1,253 @@
+<style>
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999 !important;
+        background-color: #000 !important;
+        color: #fff;
+        box-shadow: 0 2px 0 white;
+    }
+
+    /* Brand */
+    .logo-icon {
+        height: 2.5rem;
+        width: auto;
+    }
+
+    .title {
+        font-size: 18px;
+        letter-spacing: .6px;
+    }
+
+    /* Right action container */
+    .navbar-actions {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Search Button */
+    .radio-search-btn {
+        background: #000;
+        color: white;
+        border: 1px solid #0d6efd;
+        padding: 11px 20px;
+        border-radius: 30px;
+        font-weight: 600;
+        letter-spacing: .4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        overflow: hidden;
+        transition: all .35s ease;
+    }
+
+    .radio-search-btn i:first-child {
+        color: #0d6efd;
+    }
+
+    .radio-search-btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, transparent 30%, rgba(13, 110, 253, .4), transparent 70%);
+        transform: translateX(-100%);
+        transition: transform .6s ease;
+    }
+
+    .radio-search-btn:hover::before {
+        transform: translateX(100%);
+    }
+
+    .radio-search-btn i {
+        color: #0d6efd;
+    }
+
+    .nav-login {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 14px rgba(255,193,7,.35);
+    color: white;
+    border: 1px solid #444;
+    padding: 11px 18px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: .3s;
+}
+
+.nav-login i {
+    color: #ffc107;
+}
+
+/* Sweep highlight */
+.nav-login::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        120deg,
+        transparent 30%,
+        rgba(255,193,7,.45),
+        transparent 70%
+    );
+    transform: translateX(-100%);
+    transition: transform .6s ease;
+}
+
+/* Hover */
+.nav-login:hover {
+    background: #050b18;
+    border-color: #ffc107;
+}
+
+.nav-login:hover::before {
+    transform: translateX(100%);
+}
+
+.nav-avatar{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    object-fit:cover;
+    border:1px solid #ffc107;
+}
+
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 9999;
+        display: none;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity .35s ease, transform .35s ease;
+    }
+
+    .overlay.show {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .overlay.hide {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    .overlay-content {
+        margin-top: 30px;
+    }
+
+    .suggest-box {
+        background: #111;
+        max-height: 200px;
+        overflow-y: auto;
+        border-radius: 6px;
+    }
+
+    .suggest-item {
+        padding: 6px 10px;
+        cursor: pointer;
+    }
+
+    .suggest-item:hover {
+        background: #0d6efd;
+    }
+
+    .suggest-item.active {
+        background: #0d6efd;
+    }
+
+    .suggest-item.disabled {
+        opacity: .4;
+        pointer-events: none;
+    }
+
+    .card-radio {
+        min-width: 200px;
+        background: #1a1a1a;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    /* RESPONSIVE: sembunyikan teks */
+    @media(max-width:768px) {
+
+        .radio-search-btn span,
+        .nav-login span {
+            display: none;
+        }
+
+        .radio-search-btn,
+        .nav-login {
+            padding: 10px 12px;
+            border-radius: 50%;
+            justify-content: center;
+        }
+    }
+</style>
+<nav class="navbar navbar-expand-lg navbar-dark px-3">
+
+    <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="/style/image/Radio Icon.png" alt="Logo" class="me-2 logo-icon" />
+        <span class="fw-bold title">MRADIO</span>
+    </a>
+
+    <!-- RIGHT SIDE -->
+    <div class="navbar-actions">
+
+        <button class="radio-search-btn" onclick="openOverlay()">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Search</span>
+        </button>
+
+        <a href="#" id="navLogin" class="nav-login">
+            <img id="navAvatar" src="" class="nav-avatar" style="display:none;">
+            <i id="navIcon" class="fa-solid fa-user"></i>
+            <span id="navLabel">Login</span>
+        </a>
+
+    </div>
+</nav>
+
+<!-- FULLSCREEN OVERLAY -->
+<div id="searchOverlay" class="overlay text-white">
+
+    <div class="overlay-content container">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4>Search Radio</h4>
+            <button class="btn btn-danger" onclick="closeOverlay()">Close</button>
+        </div>
+
+        <!-- Radio name -->
+        <input id="radioInput" class="form-control mb-2" placeholder="Search radio name...">
+        <div id="radioSuggest" class="suggest-box"></div>
+
+        <!-- Country -->
+        <select id="countrySelect" class="form-select mb-2"></select>
+
+        <!-- Tag -->
+        <input id="tagInput" class="form-control mb-2" placeholder="Search genre/tag...">
+        <div id="tagSuggest" class="suggest-box"></div>
+
+        <button class="btn btn-success w-100 mt-2" onclick="searchRadio()">Search</button>
+
+        <!-- Top Genre -->
+        <h5 class="mt-4">Top Genre</h5>
+        <div id="topTags" class="d-flex overflow-auto gap-3 pb-2"></div>
+
+        <!-- Top Stations -->
+        <h5 class="mt-4">Top Stations</h5>
+        <div id="topStations" class="d-flex overflow-auto gap-3 pb-3"></div>
+
+    </div>
+</div>

@@ -1,0 +1,275 @@
+<style>
+.auth-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:20000;
+  backdrop-filter: blur(4px);
+}
+
+.auth-box{
+  width:370px;
+  background:#050505;
+  border-radius:14px;
+  padding:26px;
+  color:white;
+  box-shadow:0 0 40px rgba(0,0,0,.7);
+  border:1px solid #111;
+}
+
+.auth-header{
+  text-align:center;
+  margin-bottom:10px;
+}
+
+.auth-header h3{
+  font-weight:700;
+  letter-spacing:.4px;
+  margin-bottom:3px;
+}
+
+.auth-subtitle{
+  font-size:12px;
+  opacity:.6;
+}
+
+.auth-close{
+  position:absolute;
+  top:18px;
+  right:20px;
+  background:none;
+  border:none;
+  color:white;
+  font-size:18px;
+}
+
+.auth-box input{
+  width:100%;
+  margin-top:12px;
+  background:#0b0b0b;
+  border:1px solid #151515;
+  padding:11px;
+  color:white;
+  border-radius:6px;
+}
+
+.auth-main-btn{
+  width:100%;
+  background:#0d6efd;
+  border:none;
+  padding:11px;
+  font-weight:600;
+  margin-top:16px;
+  border-radius:6px;
+}
+
+/* Divider */
+.auth-divider{
+  text-align:center;
+  margin:18px 0;
+  font-size:12px;
+  opacity:.4;
+  position:relative;
+}
+
+.auth-divider::before,
+.auth-divider::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:40%;
+  height:1px;
+  background:#222;
+}
+
+.auth-divider::before{ left:0; }
+.auth-divider::after{ right:0; }
+
+/* Google Button Dark Premium */
+.google-btn{
+  width:100%;
+  background:#111;
+  color:white;
+  border:1px solid #222;
+  padding:10px;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-weight:600;
+  transition:.3s;
+}
+
+.google-btn img{
+  width:16px;
+  height:16px;
+}
+
+.google-btn:hover{
+  border-color:#0d6efd;
+  box-shadow:0 0 12px rgba(13,110,253,.35);
+}
+
+/* Switch text */
+.auth-switch-text{
+  text-align:center;
+  font-size:12px;
+  margin-top:14px;
+  opacity:.6;
+}
+
+.auth-switch-text span{
+  color:#0d6efd;
+  cursor:pointer;
+}
+
+.auth-success{
+  text-align:center;
+  padding:30px 10px 10px;
+  animation: fadeSuccess .35s ease forwards;
+}
+
+.auth-success i{
+  font-size:42px;
+  color:#28a745;
+  margin-bottom:10px;
+}
+
+.auth-success h4{
+  margin:0;
+  font-weight:700;
+}
+
+.auth-success p{
+  font-size:12px;
+  opacity:.6;
+  margin-top:4px;
+}
+
+@keyframes fadeSuccess{
+  from{opacity:0; transform:scale(.95);}
+  to{opacity:1; transform:scale(1);}
+}
+
+.auth-box{
+  position:relative;
+}
+.auth-close{
+  position:absolute;
+  top:12px;
+  right:14px;
+  width:32px;
+  height:32px;
+  cursor:pointer;
+  font-size:14px;
+}
+.auth-close:hover{
+  color:#dc3545;
+}
+.auth-close i {
+    margin-left: 15px !important;
+}
+/* Error state */
+.input-error{
+  border:1px solid #dc3545 !important;
+  box-shadow:0 0 6px rgba(220,53,69,.35);
+}
+
+/* Password wrapper */
+.password-wrap{
+  position:relative;
+}
+.password-wrap i{
+  position:absolute;
+  right:12px;
+  top:60%;
+  transform:translateY(-50%);
+  font-size:14px;
+  cursor:pointer;
+  opacity:.5;
+}
+.password-wrap i:hover{
+  opacity:1;
+}
+
+.auth-modal{
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease;
+}
+
+.auth-modal.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.auth-box{
+  transform:scale(.92);
+  opacity:0;
+  transition:transform .25s ease, opacity .25s ease;
+}
+
+.auth-modal.show .auth-box{
+  transform:scale(1);
+  opacity:1;
+}
+
+.auth-modal.hide .auth-box{
+  transform:scale(.92);
+  opacity:0;
+}
+
+.auth-error{
+  font-size:12px;
+  color:#dc3545;
+  margin-top:8px;
+  text-align:left;
+  min-height:14px;
+  opacity:.85;
+}
+
+</style>
+<div id="authModal" class="auth-modal">
+  <div class="auth-box">
+
+    <a class="auth-close" onclick="closeAuthModal()">
+        <i class="fa-solid fa-xmark"></i>
+    </a>
+
+    <div class="auth-header">
+      <h3 id="authTitle">Welcome to MRADIO</h3>
+      <div class="auth-subtitle">Login to sync favorites & radio access</div>
+    </div>
+
+    <!-- Google Login PRIORITAS -->
+    <button class="google-btn" onclick="loginWithGoogle()">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
+      Continue with Google
+    </button>
+
+    <div class="auth-divider">or login with email</div>
+
+    <input id="authName" placeholder="Full Name" style="display:none;">
+    <input id="authEmail" placeholder="Email address" autocomplete="off">
+    <div class="password-wrap">
+        <input id="authPassword" type="password" placeholder="Password" autocomplete="off">
+        <i id="togglePass" class="fa-solid fa-eye"></i>
+    </div>
+
+    <div id="authError" class="auth-error"></div>
+
+    <button class="auth-main-btn" onclick="submitAuth()">Continue</button>
+
+    <!-- Switch natural -->
+    <div class="auth-switch-text" id="authSwitchText">
+      Belum punya akun? <a href="#" onclick="switchAuth('register')">Register</a>
+    </div>
+
+  </div>
+</div>
+
+
