@@ -155,3 +155,16 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+.swal2-container{
+  z-index: 999999 !important;
+}
+
+.swal2-popup{
+  border-radius: 14px !important;
+  border: 1px solid #222; 
+}
+
+.swal2-styled{
+  border-radius: 8px !important;
+}

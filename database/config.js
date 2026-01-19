@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js";
 
 export const firebaseConfig = {
     apiKey: "AIzaSyDIOruw2ioQGb1aESlsL4oXieqxufO6Tjg",
@@ -12,5 +13,11 @@ export const firebaseConfig = {
     measurementId: "G-R89DW3SH14"
 };
 
-export const app  = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+
+// App Check Enterprise
+initializeAppCheck(app, {
+  provider: new ReCaptchaEnterpriseProvider("6LcDrU0sAAAAABXLZdgzEDp4gCJLFzSMB62V5xtd"),
+  isTokenAutoRefreshEnabled: true
+});
